@@ -16,7 +16,7 @@
     <div style="font-size: 11px;text-align: right;">&#9733查询时候的关键字千万不要复制<font color="red">空格</font>和<font color="red">Tab</font>等带格式不可见字符哦&#9786</div>
     <div id="scrollTop" class="displayNone" style="position: fixed; bottom: 94px; right: 0px; z-index: 100; display: block;">
 	<a title="返回顶部" href="#top">
-		<img src="up.png"/>
+		<img src="/kuaidi/img/up.png"/>
 	</a>
 	</div>
 
@@ -65,7 +65,7 @@
 	  		if IsEmpty(objrecord.fields("school"))	then
 	  		Response.Write "校区："
 	  		else Response.Write "校区：" & objrecord.fields("school") & "&#124" 
-	    	end if
+	    		end if
 	  		if IsEmpty(objrecord.fields("stuNumber"))	then
 	  		Response.Write "学员编号："
 	  		else Response.Write "学员编号：" & objrecord.fields("stuNumber") & "&#124" 
