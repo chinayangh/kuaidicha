@@ -92,7 +92,7 @@
 	   		end if
 	  		if IsEmpty(objrecord.fields("phone"))	then
 	  		Response.Write "<b>电话：</b>"
-	  		else Response.Write  "电话：" & objrecord(4) & "&#124" 
+	  		else Response.Write  "电话：" & left(objrecord(4),3)&"****"&right(objrecord(4),4) & "&#124" 
 	  		end if
 	  		if IsEmpty(objrecord.fields("address"))	then
 	  		Response.Write "<b>地址：</b>"
