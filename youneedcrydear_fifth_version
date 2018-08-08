@@ -24,6 +24,7 @@ cursor:pointer;
 }
 </style>
 </head>
+<!--<body oncontextmenu = "return false" onselectstart = "return false" oncopy = "return false">-->
 <body>
     <form id="top" method="post" onsubmit="return form_check()" >
         <p><b>收件人姓名:</b>&nbsp<input id="Text2" name="Text2" type="text" value="" autocomplete="off">&nbsp
