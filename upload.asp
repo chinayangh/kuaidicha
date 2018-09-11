@@ -10,7 +10,7 @@ conn1.Open conn1str
 Set rs1=server.CreateObject("adodb.recordset")
 
 
-'Á¬½ÓexcelÊı¾İÔ´
+'è¿æ¥excelæ•°æ®æº
 
 Dim xlsconn1,strs1ource,xlbook,xlsheet,i
 Dim myconn1_Xsl,xlsrs1,sql,sql2,xlsrs2,aa
@@ -22,11 +22,11 @@ i=0
 myconn1_Xsl="Provider=Microsoft.Jet.OLEDB.4.0;Data Source=c:\inetpub\kuaidi\file\book2.xls;Extended Properties=Excel 8.0"
 xlsconn1.open myconn1_Xsl
 
-sql = "Select * from [Sheet1$] where ÔËµ¥ºÅ is not null"
-'sql2="Select str(µç»°) from [Sheet1$] where ÊÕ¼şÈË like 'ÑîÏãÃµ'"
+sql = "Select * from [Sheet1$] where è¿å•å· is not null"
+'sql2="Select str(ç”µè¯) from [Sheet1$] where æ”¶ä»¶äºº like 'æ¨'"
 xlsrs1.open sql,xlsconn1,1,1
 'xlsrs2.open sql2,xlsconn1,1,1
-a=xlsrs1("ÔËµ¥ºÅ")
+a=xlsrs1("è¿å•å·")
 
 'Response.write xlsrs1.Fields.Count
 'Response.write xlsrs1.Fields.Item(i).Value
@@ -35,7 +35,7 @@ If xlsrs1.eof Then
  elseif  not conn1.execute("select * from kdinfo where kd_number like '"&a&"'").eof Then
  danhao=conn1.execute("select * from kdinfo where kd_number like '"&a&"'").Fields("kd_number")
  'Response.write danhao
-  	Response.write danhao&"¿ìµİµ¥ºÅÒÑ¾­´æÔÚÏàÍ¬µÄ¼ÇÂ¼<br>"
+  	Response.write danhao&"å¿«é€’å•å·å·²ç»å­˜åœ¨ç›¸åŒçš„è®°å½•<br>"
 
   elseif not xlsrs1.eof Then
  'For X = 0 To xlsrs2.Fields.Count - 1
@@ -46,36 +46,36 @@ If xlsrs1.eof Then
 		i=i+1
 		
 	'response.write (f)
-if not isnull(xlsrs1("ÔËµ¥ºÅ")) Then
-	a=xlsrs1("ÔËµ¥ºÅ")'excel±íÖĞµÄ×Ö¶ÎÃû³Æ
+if not isnull(xlsrs1("è¿å•å·")) Then
+	a=xlsrs1("è¿å•å·")'excelè¡¨ä¸­çš„å­—æ®µåç§°
 end if
-if not isnull(xlsrs1("¿ìµİ¹«Ë¾"))  Then
-	b=xlsrs1("¿ìµİ¹«Ë¾")
+if not isnull(xlsrs1("å¿«é€’å…¬å¸"))  Then
+	b=xlsrs1("å¿«é€’å…¬å¸")
 end if
 if not isnull(xlsrs1(9))  Then
 	c=xlsrs1(9)
 end if 
-if not isnull(xlsrs1("Çï¼¾¿Î³Ì¼òÃû"))  Then
-	d=xlsrs1("Çï¼¾¿Î³Ì¼òÃû")
+if not isnull(xlsrs1("ç§‹å­£è¯¾ç¨‹ç®€å"))  Then
+	d=xlsrs1("ç§‹å­£è¯¾ç¨‹ç®€å")
 end if
-if not isnull(xlsrs1("µØÖ·"))  Then
-	e=xlsrs1("µØÖ·")
+if not isnull(xlsrs1("åœ°å€"))  Then
+	e=xlsrs1("åœ°å€")
 end if
 if not isnull(xlsrs1(5))  Then
 	f=xlsrs1(5)
 	'response.write (f)
 end if 
-if not isnull(xlsrs1("ÊÕ¼şÈË"))   Then
-	g=xlsrs1("ÊÕ¼şÈË")
+if not isnull(xlsrs1("æ”¶ä»¶äºº"))   Then
+	g=xlsrs1("æ”¶ä»¶äºº")
 end if 
-if not isnull(xlsrs1("Ñ§Ô±±àÂë"))	Then
-	h=xlsrs1("Ñ§Ô±±àÂë")
+if not isnull(xlsrs1("å­¦å‘˜ç¼–ç "))	Then
+	h=xlsrs1("å­¦å‘˜ç¼–ç ")
 end if 
-'if not isnull(xlsrs1("°à¼¶·ÖĞ£"))	Then
-	k=xlsrs1("°à¼¶·ÖĞ£")
+'if not isnull(xlsrs1("ç­çº§åˆ†æ ¡"))	Then
+	k=xlsrs1("ç­çº§åˆ†æ ¡")
 'end if
-if not isnull(xlsrs1("ÓÊ¼ÄÈÕÆÚ"))	Then
-	j=xlsrs1("ÓÊ¼ÄÈÕÆÚ")
+if not isnull(xlsrs1("é‚®å¯„æ—¥æœŸ"))	Then
+	j=xlsrs1("é‚®å¯„æ—¥æœŸ")
 end if 
  
  
@@ -116,12 +116,12 @@ xlsrs1.close
 conn1.close
 
 Response.CharSet = "GB2312"
-Response.write "¹²µ¼Èë<font color='red'>" & i & "</font>Ìõ¼ÇÂ¼.<br>" 
+Response.write "å…±å¯¼å…¥<font color='red'>" & i & "</font>æ¡è®°å½•.<br>" 
 
 set xlsconn1=nothing
 end if
 %>
-<!--<script>alert("µ¥ºÅµ¼Èë³É¹¦£¡");</script>-->
+<!--<script>alert("å•å·å¯¼å…¥æˆåŠŸï¼");</script>-->
 
 <!--
 http://support.microsoft.com/kb/295646/
