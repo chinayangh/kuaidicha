@@ -1,0 +1,379 @@
+﻿<!DOCTYPE html >
+
+<html >
+<head>
+	<title>快递查询</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="renderer" content="webkit">
+<script type="text/javascript" src="jquery-1.11.3.min.js"></script>
+<!--<script type="text/javascript" src="//support.huawei.com/resource/3rdparty/jquery/1.11.3/jquery-1.11.3.min.js"></script>-->
+ <script type="text/javascript">
+         function  form_check() {
+              
+               if(document.getElementById('Text2').value==""&&document.getElementById('Text4').value==""&&document.getElementById('Text3').value==""&&document.getElementById('Text1').value=="") 
+               {
+                    alert("请至少输入一项");
+                   return false
+               }
+             else
+              {return true}
+          }
+
+          $(function(){
+    //获取要定位元素距离浏览器顶部的距离
+    var navH = $("#top1").offset().top;
+    //滚动条事件
+    $(window).scroll(function(){
+    //获取滚动条的滑动距离
+      var scroH = $(this).scrollTop();
+      //滚动条的滑动距离大于等于定位元素距离浏览器顶部的距离，就固定，反之就不固定
+      if(scroH>=navH){
+        $("#top1").css({"position":"fixed",});
+      }else {
+        $("#top1").css({"position":"relative"});
+      }
+    });
+  });
+    </script>
+<style type="text/css">
+.btn{
+cursor:pointer;
+}
+#top1{
+	z-index: 102;background: #ffffff;top: 0;width: 100%;height: 75px;
+}
+</style>
+</head>
+<!--<body oncontextmenu = "return false" onselectstart = "return false" oncopy = "return false">-->
+	<body >
+	<div id="top1" style="">
+    	<form   id="top" method="post" onsubmit="return form_check()" >
+        <p><b>收件人姓名:</b>&nbsp<input id="Text2" name="Text2" type="text" value="" autocomplete="off">&nbsp
+        	<b>收件人电话:</b>&nbsp<input id="Text4" name="Text4" type="text" value="" autocomplete="off">&nbsp
+        	<b>学员编号:</b>&nbsp<input id="Text3" name="Text3" type="text" value="" autocomplete="off">&nbsp
+        	<b>快递单号:</b>&nbsp<input id="Text1" name="Text1" type="text" value="" autocomplete="off">&nbsp
+        	<input name="mybutton" type="submit" value="查一下"  class="btn" onclick="document.pressed=this.value"/>&nbsp
+        	<input   type="button"   value="查询物流动态" title="先查单号再用单号查动态"   onclick="window.open('http://192.168.10.122:8058/kuaidi/expresstrack.asp')">
+        	
+        </p>
+
+    	</form>
+    
+    	<div style="font-size: 11px;text-align: left;">&#9733查询时候的关键字千万不要复制<font color="red">空格</font>和<font color="red">Tab</font>等带格式不可见字符哦&#9786</div>
+	</div>
+    <!--<div align="center"><a href="http://192.168.10.122:8058/kuaidi/expresstrack.asp" target="_blank">点此跟踪物流动态</a></div>-->
+    <div id="scrollTop" class="displayNone" style="position: fixed; bottom: 94px; right: 0px; z-index: 100; display: block;">
+	<a title="返回顶部" href="#top">
+		<img src="/kuaidi/img/up.png"/>
+	</a>
+	</div>
+
+
+   
+      <% 
+      	 set strFirst = Request.Form("Text1")
+      	 set strSecond = Request.Form("Text2")        
+         set strThird = Request.Form("Text3")
+         set strForth = Request.Form("Text4")
+          i = 0
+          'if not IsEmpty(strFirst) then
+          'varFirst = eval(strFirst)
+      	  'end if
+      	 
+	  set objconn=server.createobject("adodb.connection")
+	  objconn.open "provider=microsoft.jet.oledb.4.0; data source=" & server.mappath("kdinfo.mdb")
+	  set objrecord=server.createobject("adodb.recordset")
+	  
+if strSecond <> "" then
+
+	  set objrecord=objconn.execute("select kd_date,school,stuNumber,receiverName,phone,address,lesson_name,sender,company,kd_number from kdinfo where receiverName like '" & strSecond & "'")
+	
+
+      if IsEmpty(strFirst) then
+	  Response.Write  "&nbsp"
+	  
+
+	  elseif objrecord.eof or objrecord.bof then
+	  Response.Write  "<br/>没有查到要找的记录&#9785&nbsp换个查询条件再试试&#9786"
+	  
+	  elseif not objrecord.eof then
+	  do while not objrecord.eof
+	  	i = i + 1
+	  	Response.Write i & "<hr height:1px;border:none;border-top:1px solid #555555; /> " 
+	  		if IsEmpty(objrecord.fields("company")) then
+	  		Response.Write "<b>公司：</b>"
+	  		else Response.Write "公司：" & objrecord(8) & "&#124" 
+	  		end if
+	  		if	IsEmpty(objrecord.fields("kd_date"))	then
+	  		Response.Write("<h5>日期：</h5>")
+	  		else Response.Write "日期：" & objrecord(0) & "&#124" 
+	  		end if
+	  		if IsEmpty(objrecord.fields("school"))	then
+	  		Response.Write("<h5>校区：</h5>")
+	  		else Response.Write "校区：" & objrecord(1) & "&#124" 
+	    		end if
+	  		if IsEmpty(objrecord.fields("stuNumber"))	then
+	  		Response.Write "<b>学员编号：</b>"
+	  		else Response.Write "学员编号：" & objrecord(2) & "&#124" 
+	  		end if
+	  		if IsEmpty(objrecord.fields("receiverName")) then
+	  		Response.Write "<b>收件人：</b>"
+	  		else Response.Write "收件人：" & objrecord(3) & "&#124" 
+	   		end if
+	  		if IsEmpty(objrecord.fields("phone"))	then
+	  		Response.Write "<b>电话：</b>"
+	  		else Response.Write  "电话：" & left(objrecord(4),3)&"****"&right(objrecord(4),4) & "&#124" 
+	  		end if
+	  		if IsEmpty(objrecord.fields("address"))	then
+	  		Response.Write "<b>地址：</b>"
+	  		else Response.Write "地址：" & objrecord(5) & "&#124" 
+	  		end if
+	  		if IsEmpty(objrecord.fields("kd_number"))	then
+	  		Response.Write "<b>快递单号：</b>"
+	  		else Response.Write "快递单号：" & objrecord(9) & "&#124" 
+	  		end if
+	  		if IsEmpty(objrecord.fields("sender"))	then
+	  		Response.Write "<b>邮寄方：</b>"
+	  		else Response.Write "邮寄方：" & objrecord(7) & "&#124"
+	  		end if
+	  		if IsEmpty(objrecord.fields("lesson_name"))	then
+	  		Response.Write "<b>课程：</b>"
+	  		else Response.Write "课程：" & objrecord(6) & "<hr height:1px;border:none;border-top:1px solid #555555; />" 
+	  		end if
+	  	objrecord.movenext
+	  	loop
+	  	end if
+
+          objrecord.close
+          objconn.close
+end if
+	%>
+	
+	<%
+		set strFirst = Request.Form("Text1")
+      	 set strSecond = Request.Form("Text2")        
+         set strThird = Request.Form("Text3")
+         set strForth = Request.Form("Text4")
+	set objconn2=server.createobject("adodb.connection")
+	  objconn2.open "provider=microsoft.jet.oledb.4.0; data source=" & server.mappath("kdinfo.mdb")
+	  set objrecord2=server.createobject("adodb.recordset")
+if strFirst <> "" then
+	'Response.Write strFirst
+	  set objrecord2=objconn2.execute("select kd_date,school,stuNumber,receiverName,phone,address,lesson_name,sender,company,kd_number from kdinfo where kd_number like '" & strFirst & "'")
+	
+
+      if IsEmpty(strFirst) then
+	  Response.Write  "&nbsp"
+	  
+
+	  elseif objrecord2.eof or objrecord2.bof then
+	  Response.Write  "<br/>没有查到要找的记录&#9785&nbsp换个查询条件再试试&#9786"
+	  
+	  elseif not objrecord2.eof then
+	  do while not objrecord2.eof
+	  	i = i + 1
+	  	Response.Write i & "<hr height:1px;border:none;border-top:1px solid #555555; /> " 
+	  		if IsEmpty(objrecord2.fields("company")) then
+	  		Response.Write "<b>公司：</b>"
+	  		else Response.Write "公司：" & objrecord2(8) & "&#124" 
+	  		end if
+	  		if	IsEmpty(objrecord2.fields("kd_date"))	then
+	  		Response.Write("<h5>日期：</h5>")
+	  		else Response.Write "日期：" & objrecord2(0) & "&#124" 
+	  		end if
+	  		if IsEmpty(objrecord2.fields("school"))	then
+	  		Response.Write("<h5>校区：</h5>")
+	  		else Response.Write "校区：" & objrecord2(1) & "&#124" 
+	    		end if
+	  		if IsEmpty(objrecord2.fields("stuNumber"))	then
+	  		Response.Write "<b>学员编号：</b>"
+	  		else Response.Write "学员编号：" & objrecord2(2) & "&#124" 
+	  		end if
+	  		if IsEmpty(objrecord2.fields("receiverName")) then
+	  		Response.Write "<b>收件人：</b>"
+	  		else Response.Write "收件人：" & objrecord2(3) & "&#124" 
+	   		end if
+	  		if IsEmpty(objrecord2.fields("phone"))	then
+	  		Response.Write "<b>电话：</b>"
+	  		else Response.Write  "电话：" & left(objrecord2(4),3)&"****"&right(objrecord2(4),4) & "&#124" 
+	  		end if
+	  		if IsEmpty(objrecord2.fields("address"))	then
+	  		Response.Write "<b>地址：</b>"
+	  		else Response.Write "地址：" & objrecord2(5) & "&#124" 
+	  		end if
+	  		if IsEmpty(objrecord2.fields("kd_number"))	then
+	  		Response.Write "<b>快递单号：</b>"
+	  		else Response.Write "快递单号：" & objrecord2(9) & "&#124" 
+	  		end if
+	  		if IsEmpty(objrecord2.fields("sender"))	then
+	  		Response.Write "<b>邮寄方：</b>"
+	  		else Response.Write "邮寄方：" & objrecord2(7) & "&#124"
+	  		end if
+	  		if IsEmpty(objrecord2.fields("lesson_name"))	then
+	  		Response.Write "<b>课程：</b>"
+	  		else Response.Write "课程：" & objrecord2(6) & "<hr height:1px;border:none;border-top:1px solid #555555; />" 
+	  		end if
+	  	objrecord2.movenext
+	  	loop
+	  	end if
+
+          objrecord2.close
+          objconn2.close
+end if
+
+     %>
+
+
+<%
+		set strFirst = Request.Form("Text1")
+      	 set strSecond = Request.Form("Text2")        
+         set strThird = Request.Form("Text3")
+         set strForth = Request.Form("Text4")
+	set objconn3=server.createobject("adodb.connection")
+	  objconn3.open "provider=microsoft.jet.oledb.4.0; data source=" & server.mappath("kdinfo.mdb")
+	  set objrecord3=server.createobject("adodb.recordset")
+if strThird <> "" then
+	'Response.Write strFirst
+	  set objrecord3=objconn3.execute("select kd_date,school,stuNumber,receiverName,phone,address,lesson_name,sender,company,kd_number from kdinfo where stuNumber like '" & strThird & "'")
+	
+
+      if IsEmpty(strFirst) then
+	  Response.Write  "&nbsp"
+	  
+
+	  elseif objrecord3.eof or objrecord3.bof then
+	  Response.Write  "<br/>没有查到要找的记录&#9785&nbsp换个查询条件再试试&#9786"
+	  
+	  elseif not objrecord3.eof then
+	  do while not objrecord3.eof
+	  	i = i + 1
+	  	Response.Write i & "<hr height:1px;border:none;border-top:1px solid #555555; /> " 
+	  		if IsEmpty(objrecord3.fields("company")) then
+	  		Response.Write "<b>公司：</b>"
+	  		else Response.Write "公司：" & objrecord3(8) & "&#124" 
+	  		end if
+	  		if	IsEmpty(objrecord3.fields("kd_date"))	then
+	  		Response.Write("<h5>日期：</h5>")
+	  		else Response.Write "日期：" & objrecord3(0) & "&#124" 
+	  		end if
+	  		if IsEmpty(objrecord3.fields("school"))	then
+	  		Response.Write("<h5>校区：</h5>")
+	  		else Response.Write "校区：" & objrecord3(1) & "&#124" 
+	    		end if
+	  		if IsEmpty(objrecord3.fields("stuNumber"))	then
+	  		Response.Write "<b>学员编号：</b>"
+	  		else Response.Write "学员编号：" & objrecord3(2) & "&#124" 
+	  		end if
+	  		if IsEmpty(objrecord3.fields("receiverName")) then
+	  		Response.Write "<b>收件人：</b>"
+	  		else Response.Write "收件人：" & objrecord3(3) & "&#124" 
+	   		end if
+	  		if IsEmpty(objrecord3.fields("phone"))	then
+	  		Response.Write "<b>电话：</b>"
+	  		else Response.Write  "电话：" & left(objrecord3(4),3)&"****"&right(objrecord3(4),4) & "&#124" 
+	  		end if
+	  		if IsEmpty(objrecord3.fields("address"))	then
+	  		Response.Write "<b>地址：</b>"
+	  		else Response.Write "地址：" & objrecord3(5) & "&#124" 
+	  		end if
+	  		if IsEmpty(objrecord3.fields("kd_number"))	then
+	  		Response.Write "<b>快递单号：</b>"
+	  		else Response.Write "快递单号：" & objrecord3(9) & "&#124" 
+	  		end if
+	  		if IsEmpty(objrecord3.fields("sender"))	then
+	  		Response.Write "<b>邮寄方：</b>"
+	  		else Response.Write "邮寄方：" & objrecord3(7) & "&#124"
+	  		end if
+	  		if IsEmpty(objrecord3.fields("lesson_name"))	then
+	  		Response.Write "<b>课程：</b>"
+	  		else Response.Write "课程：" & objrecord3(6) & "<hr height:1px;border:none;border-top:1px solid #555555; />" 
+	  		end if
+	  	objrecord3.movenext
+	  	loop
+	  	end if
+
+          objrecord3.close
+          objconn3.close
+end if
+
+     %>
+
+
+
+<%
+		set strFirst = Request.Form("Text1")
+      	 set strSecond = Request.Form("Text2")        
+         set strThird = Request.Form("Text3")
+         set strForth = Request.Form("Text4")
+	set objconn4=server.createobject("adodb.connection")
+	  objconn4.open "provider=microsoft.jet.oledb.4.0; data source=" & server.mappath("kdinfo.mdb")
+	  set objrecord4=server.createobject("adodb.recordset")
+if strForth <> "" then
+	'Response.Write strFirst
+	  set objrecord4=objconn4.execute("select kd_date,school,stuNumber,receiverName,phone,address,lesson_name,sender,company,kd_number from kdinfo where phone like '" & strForth & "'")
+	
+
+      if IsEmpty(strFirst) then
+	  Response.Write  "&nbsp"
+	  
+
+	  elseif objrecord4.eof or objrecord4.bof then
+	  Response.Write  "<br/>没有查到要找的记录&#9785&nbsp换个查询条件再试试&#9786"
+	  
+	  elseif not objrecord4.eof then
+	  do while not objrecord4.eof
+	  	i = i + 1
+	  	Response.Write i & "<hr height:1px;border:none;border-top:1px solid #555555; /> " 
+	  		if IsEmpty(objrecord4.fields("company")) then
+	  		Response.Write "<b>公司：</b>"
+	  		else Response.Write "公司：" & objrecord4(8) & "&#124" 
+	  		end if
+	  		if	IsEmpty(objrecord4.fields("kd_date"))	then
+	  		Response.Write("<h5>日期：</h5>")
+	  		else Response.Write "日期：" & objrecord4(0) & "&#124" 
+	  		end if
+	  		if IsEmpty(objrecord4.fields("school"))	then
+	  		Response.Write("<h5>校区：</h5>")
+	  		else Response.Write "校区：" & objrecord4(1) & "&#124" 
+	    		end if
+	  		if IsEmpty(objrecord4.fields("stuNumber"))	then
+	  		Response.Write "<b>学员编号：</b>"
+	  		else Response.Write "学员编号：" & objrecord4(2) & "&#124" 
+	  		end if
+	  		if IsEmpty(objrecord4.fields("receiverName")) then
+	  		Response.Write "<b>收件人：</b>"
+	  		else Response.Write "收件人：" & objrecord4(3) & "&#124" 
+	   		end if
+	  		if IsEmpty(objrecord4.fields("phone"))	then
+	  		Response.Write "<b>电话：</b>"
+	  		else Response.Write  "电话：" & left(objrecord4(4),3)&"****"&right(objrecord4(4),4) & "&#124" 
+	  		end if
+	  		if IsEmpty(objrecord4.fields("address"))	then
+	  		Response.Write "<b>地址：</b>"
+	  		else Response.Write "地址：" & objrecord4(5) & "&#124" 
+	  		end if
+	  		if IsEmpty(objrecord4.fields("kd_number"))	then
+	  		Response.Write "<b>快递单号：</b>"
+	  		else Response.Write "快递单号：" & objrecord4(9) & "&#124" 
+	  		end if
+	  		if IsEmpty(objrecord4.fields("sender"))	then
+	  		Response.Write "<b>邮寄方：</b>"
+	  		else Response.Write "邮寄方：" & objrecord4(7) & "&#124"
+	  		end if
+	  		if IsEmpty(objrecord4.fields("lesson_name"))	then
+	  		Response.Write "<b>课程：</b>"
+	  		else Response.Write "课程：" & objrecord4(6) & "<hr height:1px;border:none;border-top:1px solid #555555; />" 
+	  		end if
+	  	objrecord4.movenext
+	  	loop
+	  	end if
+
+          objrecord4.close
+          objconn4.close
+end if
+
+     %>
+
+</body>
+</html>
