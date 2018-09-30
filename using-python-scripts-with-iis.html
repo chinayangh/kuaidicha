@@ -1,103 +1,79 @@
-<div ng-if="isGenericArticle" generic-article="" article="article" class="ng-scope ng-isolate-scope"><div data-grid="col-12 pad-12x">
-    <div data-grid="container" class="main-content-container">
-        <header data-grid="col-12">
-            <!-- ngIf: article.details.heading --><h1 class="c-heading-3 article-heading ng-binding ng-scope" ng-if="article.details.heading" ng-bind-html="article.details.heading">Using Python Scripts with IIS</h1><!-- end ngIf: article.details.heading -->
-            <!-- ngIf: !article.details.heading -->
-            <div ng-show="$root.isIframe &amp;&amp; !$root.isInternal" content-notice="" class="ng-isolate-scope ng-hide" aria-hidden="true"><div class="notice" itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject">
-    <img class="icon x-float-left" alt="Content provided by Microsoft" ng-src="https://compass-ssl.microsoft.com/assets/bc/84/bc84e95b-76b9-4b24-ad5f-9748a2d75b1b.svg?n=microsoft_account_logo_color.svg" src="https://compass-ssl.microsoft.com/assets/bc/84/bc84e95b-76b9-4b24-ad5f-9748a2d75b1b.svg?n=microsoft_account_logo_color.svg">
-    <meta itemprop="url" content="https://compass-ssl.microsoft.com/assets/bc/84/bc84e95b-76b9-4b24-ad5f-9748a2d75b1b.svg?n=microsoft_account_logo_color.svg">
-    <meta itemprop="width" content="150">
-    <meta itemprop="height" content="150">
-    <p class="display-inline c-paragraph-3 ng-binding">Content provided by Microsoft</p>
-</div></div>
-            <!-- ngIf: article.details.products.length || article.details.supportAreaPathNodes.length -->
-            <!-- ngIf: $parent.apFlight3 -->
-            <hr class="c-divider f-pad-bottom-6x f-pad-top-3x">
-        </header>
-    </div>
-</div>
 
-<div data-grid="col-12 pad-12x" class="x-hidden-focus">
-    <div data-grid="container" class="main-content-container">
+Using Python Scripts with IIS
+Summary
+Python is an interpreted scripting language similar in concept to Microsoft Visual Basic Script (VBScript), Microsoft JScript, Perl, or other scripting languages. While Internet Information Server (IIS) uses the Windows Scripting Host for its VBScript and JScript needs, IIS can use other script interpreters for Active Server Pages (ASP) as well as simple Common Gateway Interface (CGI) scripts. This article describes how to use Python as your scripting language of choice for both CGI and ASP.
+More Information
+You can choose any Python interpreter as the script engine for processing Python scripts. The example in this article uses ActiveState's ActivePython 2.0.
 
-        <!-- ngIf: article.details.subType === 'release-notes' -->
+The following steps show how to set up the installed Python interpreter as a script engine for use with IIS and ASP. 
 
-        <!-- ngIf: article.details.subType === 'error-status-code' && article.errorStatusCodes && article.errorStatusCodes.length > 5 -->
+Make sure that the Web site containing the Python scripts has an application set up. To do this, perform the following steps:
 
-        <!-- ngIf: hotfixLink -->
+In the Internet Service Manager (ISM), right-click the directory that is the application starting point, and then click Properties.
+Click the Home Directory, Virtual Directory, or Directory tab.
+Under Application Settings, verify that the Name text box is active, and that it contains a name.
+If the dialog box is inactive, click Create to create an application, and then give the application a name (the default name is "Default Application").
+Under Permissions, verify that Execute (including script) is selected.
+For more information about setting up applications, see "Configuring Applications" in IIS Help.
+Verify that application mapping for .py files is set up. To do this, perform the following steps:
+In the ISM, under Internet Information Server, right-click the computer name, and then click Properties.
+From the Master Properties drop-down list, click WWW Service and then click Edit.
+Click the Home Directory tab, and then click Configuration.
+To add the application mapping, click Add, and then create a new mapping by using the following information (substituting the correct path on your computer):
+Executable: "C:\Python20\python.exe %s %s" (The two "%s" after the executable are required for console-based script interpreters but would not be required for an Internet Server API [ISAPI]-based script interpreter).
+Extension: .py
+Script engine: selected.
+Check that File Exists: selected (for security) Click OK.
 
-        <!-- ngIf: article.details.isMachineTranslated === true || article.details.isMachineTranslated === 'true' -->
-        <!-- ngIf: article.details.isInternalContent === true || article.details.isInternalContent === 'true' -->
+Verify that the file and directory permissions are set correctly in the computer's access control list (ACL). For anonymous access, the IUSR_[computername] and IWAM_[computername] user accounts must have at least "read" permission (RX). When using other types of password authentication, the permissions required may vary.
+The following Python script can be used to test for the proper installation and execution of Python-based CGI scripts with IIS.
 
-        <!-- ngIf: article.gdsProducts.length > 0 -->
-        <!-- ngIf: isRetired -->
+Create a file in a text editor such as Microsoft Notepad, and include the following lines of code. Save the file in the scripts folder as Test.py.
+print
+print 'Status: 200 OK'
+print 'Content-type: text/html'
+print
 
-        <!-- ngIf: article.details.supportAreaPathNodes.length -->
+print '<HTML><HEAD><TITLE>Python Sample CGI</TITLE></HEAD>'
+print '<BODY>'
+print '<H1>This is a header</H1>'
 
-        <div class="content-article">
-            <div content-section-list="article.details.body" itemprop="articleBody" class="ng-isolate-scope"><!-- ngRepeat: section in contentSectionList track by $index --><!-- ngIf: !isString && hasContent() --><div ng-repeat="section in contentSectionList track by $index" ng-if="!isString &amp;&amp; hasContent()" class="ng-scope">
-    <div content-section="section" class="ng-isolate-scope"><!-- ngIf: typeof(contentSection) !== 'string' --><section class="section ng-scope" data-grid="col-12" ng-if="typeof(contentSection) !== 'string'" ng-show="shouldShow" applies-to-saps="[]" ng-attr-id="{{contentSection.meta.id}}" ng-class="{'internal-content': isInternalSection(), 'flighted-content': shouldHighlightFlight }" data-before="" aria-hidden="false">
-    <!-- ngIf: isInternalSection() -->
-    <!-- ngIf: contentSection.title --><div ng-if="contentSection.title" class="ng-scope">
-        <h2 class="c-heading-4 f-lean bold ng-binding" ng-bind-html="contentSection.title"> Summary</h2>
-        <hr class="c-divider f-pad-bottom-6x f-pad-top-3x">
-        <!-- ngIf: contentSection.subtitle -->
-    </div><!-- end ngIf: contentSection.title -->
-    <!-- ngIf: contentSection.content && contentSection.content.length > 0 --><div class="section-body ng-scope" ng-if="contentSection.content &amp;&amp; contentSection.content.length > 0">
-        <!-- ngRepeat: content in contentSection.content track by $index --><div ng-attr-data-grid="{{getStyleClass()}}" ng-repeat="content in contentSection.content track by $index" class="ng-scope" data-grid="col-12">
-            <div compile="content" data-grid="col-12" class="ng-isolate-scope"><div class="kb-summary-section section ng-scope">Python is an interpreted scripting language similar in concept to Microsoft Visual Basic Script (VBScript), Microsoft JScript, Perl, or other scripting languages. While Internet Information Server (IIS) uses the Windows Scripting Host for its VBScript and JScript needs, IIS can use other script interpreters for Active Server Pages (ASP) as well as simple Common Gateway Interface (CGI) scripts. This article describes how to use Python as your scripting language of choice for both CGI and ASP.<br></div></div>
-            <!-- ngIf: contentSection.meta.type != 'single-column' && !$last -->
-        </div><!-- end ngRepeat: content in contentSection.content track by $index -->
-    </div><!-- end ngIf: contentSection.content && contentSection.content.length > 0 -->
-</section><!-- end ngIf: typeof(contentSection) !== 'string' --></div>
-</div><!-- end ngIf: !isString && hasContent() --><!-- end ngRepeat: section in contentSectionList track by $index --><!-- ngIf: !isString && hasContent() --><div ng-repeat="section in contentSectionList track by $index" ng-if="!isString &amp;&amp; hasContent()" class="ng-scope">
-    <div content-section="section" class="ng-isolate-scope"><!-- ngIf: typeof(contentSection) !== 'string' --><section class="section ng-scope" data-grid="col-12" ng-if="typeof(contentSection) !== 'string'" ng-show="shouldShow" applies-to-saps="[]" ng-attr-id="{{contentSection.meta.id}}" ng-class="{'internal-content': isInternalSection(), 'flighted-content': shouldHighlightFlight }" data-before="" aria-hidden="false">
-    <!-- ngIf: isInternalSection() -->
-    <!-- ngIf: contentSection.title --><div ng-if="contentSection.title" class="ng-scope">
-        <h2 class="c-heading-4 f-lean bold ng-binding" ng-bind-html="contentSection.title"> More Information</h2>
-        <hr class="c-divider f-pad-bottom-6x f-pad-top-3x">
-        <!-- ngIf: contentSection.subtitle -->
-    </div><!-- end ngIf: contentSection.title -->
-    <!-- ngIf: contentSection.content && contentSection.content.length > 0 --><div class="section-body ng-scope" ng-if="contentSection.content &amp;&amp; contentSection.content.length > 0">
-        <!-- ngRepeat: content in contentSection.content track by $index --><div ng-attr-data-grid="{{getStyleClass()}}" ng-repeat="content in contentSection.content track by $index" class="ng-scope" data-grid="col-12">
-            <div compile="content" data-grid="col-12" class="ng-isolate-scope"><div class="kb-moreinformation-section section ng-scope">You can choose any Python interpreter as the script engine for processing Python scripts. The example in this article uses ActiveState's ActivePython 2.0.<br><br>The following steps show how to set up the installed Python interpreter as a script engine for use with IIS and ASP.  <br><br><ol class="sbody-num_list"><li>Make sure that the Web site containing the Python scripts has an application set up. To do this, perform the following steps:<br><br><ol class="sbody-alpha_list"><li>In the Internet Service Manager (ISM), right-click the directory that is the application starting point, and then click <span class="text-base">Properties</span>.</li><li>Click the <span class="text-base">Home Directory</span>, <span class="text-base">Virtual Directory</span>, or <span class="text-base">Directory</span> tab.</li><li>Under <span class="text-base">Application Settings</span>, verify that the <span class="text-base">Name</span> text box is active, and that it contains a name.</li><li>If the dialog box is inactive, click <span class="text-base">Create</span> to create an application, and then give the application a name (the default name is "Default Application").</li><li>Under <span class="text-base">Permissions</span>, verify that <span class="text-base">Execute (including script)</span> is selected.</li></ol>For more information about setting up applications, see "Configuring Applications" in IIS Help.</li><li>Verify that application mapping for .py files is set up. To do this, perform the following steps:<ol class="sbody-alpha_list"><li>In the ISM, under <span class="text-base">Internet Information Server</span>, right-click the computer name, and then click<span class="text-base"> Properties</span>.</li><li>From the <span class="text-base">Master Properties</span> drop-down list, click <span class="text-base">WWW Service</span> and then click <span class="text-base">Edit</span>.</li><li>Click the <span class="text-base">Home Directory</span> tab, and then click <span class="text-base">Configuration</span>.</li><li>To add the application mapping, click <span class="text-base">Add</span>, and then create a new mapping by using the following information (substituting the correct path on your computer):<ul class="sbody-free_list"><li>Executable: "C:\Python20\python.exe %s %s"  (The two "%s" after the executable are required for console-based script interpreters but would not be required for an Internet Server API [ISAPI]-based script interpreter).</li><li>Extension: .py</li><li>Script engine: selected.</li><li>Check that File Exists: selected (for security) Click <span class="text-base">OK</span>.</li></ul><br></li></ol></li><li>Verify that the file and directory permissions are set correctly in the computer's access control list (ACL). For anonymous access, the IUSR_<span class="sbody-italic">[computername]</span> and IWAM_<span class="sbody-italic">[computername]</span> user accounts must have at least "read" permission (RX). When using other types of password authentication, the permissions required may vary.</li></ol>The following Python script can be used to test for the proper installation and execution of Python-based CGI scripts with IIS.<br><br>Create a file in a text editor such as Microsoft Notepad, and include the following lines of code. Save the file in the scripts folder as <span class="sbody-userinput">Test.py</span>.<br><div class="sbody-code"><pre class="x-hidden-focus"><code class="x-hidden-focus">print<br>print 'Status: 200 OK'<br>print 'Content-type: text/html'<br>print<br><br>print '&lt;HTML&gt;&lt;HEAD&gt;&lt;TITLE&gt;Python Sample CGI&lt;/TITLE&gt;&lt;/HEAD&gt;'<br>print '&lt;BODY&gt;'<br>print '&lt;H1&gt;This is a header&lt;/H1&gt;'<br><br>print '&lt;p&gt;' #this is a comment<br>print 'See this is just like most other HTML'<br>print '&lt;br&gt;'<br>print '&lt;/BODY&gt;'<br></code></pre></div><br>Browse "Test.py" on the Web site: <br><br><div class="indent">http://<span class="sbody-italic">&lt;computer_name&gt;</span>/scripts/test.py<br></div>Alternatively, you can use the Python interpreter as your script interpreter in your ASP pages.  After you have the Python scripting engine registered, create a file by using Notepad and include the following lines of code. Save the file in the scripts folder as <span class="sbody-userinput">Python.asp</span>.<br><br><div class="sbody-code"><pre><code>&lt;%@LANGUAGE=Python%&gt;<br>&lt;HTML&gt;<br>&lt;head&gt;&lt;/head&gt;<br>&lt;body&gt;<br>&lt;h1&gt;Python Test&lt;/h1&gt;<br><br>&lt;%<br>#do some python stuff here<br><br>Response.Write('Python Test&lt;br&gt;')<br>Response.write('&lt;h3&gt;Smaller heading&lt;/hr&gt;')<br>%&gt;<br><br>&lt;/body&gt;<br>&lt;/html&gt;<br></code></pre></div><br>Browse "Python.asp" on the Web site: <div class="indent">http://<span class="sbody-italic">&lt;computer_name&gt;</span>/scripts/python.asp<br></div></div></div>
-            <!-- ngIf: contentSection.meta.type != 'single-column' && !$last -->
-        </div><!-- end ngRepeat: content in contentSection.content track by $index -->
-    </div><!-- end ngIf: contentSection.content && contentSection.content.length > 0 -->
-</section><!-- end ngIf: typeof(contentSection) !== 'string' --></div>
-</div><!-- end ngIf: !isString && hasContent() --><!-- end ngRepeat: section in contentSectionList track by $index --><!-- ngIf: !isString && hasContent() --><div ng-repeat="section in contentSectionList track by $index" ng-if="!isString &amp;&amp; hasContent()" class="ng-scope">
-    <div content-section="section" class="ng-isolate-scope"><!-- ngIf: typeof(contentSection) !== 'string' --><section class="section ng-scope" data-grid="col-12" ng-if="typeof(contentSection) !== 'string'" ng-show="shouldShow" applies-to-saps="[]" ng-attr-id="{{contentSection.meta.id}}" ng-class="{'internal-content': isInternalSection(), 'flighted-content': shouldHighlightFlight }" data-before="" aria-hidden="false">
-    <!-- ngIf: isInternalSection() -->
-    <!-- ngIf: contentSection.title --><div ng-if="contentSection.title" class="ng-scope">
-        <h2 class="c-heading-4 f-lean bold ng-binding" ng-bind-html="contentSection.title"> References</h2>
-        <hr class="c-divider f-pad-bottom-6x f-pad-top-3x">
-        <!-- ngIf: contentSection.subtitle -->
-    </div><!-- end ngIf: contentSection.title -->
-    <!-- ngIf: contentSection.content && contentSection.content.length > 0 --><div class="section-body ng-scope" ng-if="contentSection.content &amp;&amp; contentSection.content.length > 0">
-        <!-- ngRepeat: content in contentSection.content track by $index --><div ng-attr-data-grid="{{getStyleClass()}}" ng-repeat="content in contentSection.content track by $index" class="ng-scope" data-grid="col-12">
-            <div compile="content" data-grid="col-12" class="ng-isolate-scope"><div class="kb-references-section section ng-scope">For more information on Python see:<br><br><div class="indent"><a id="kb-link-1" href="http://www.python.org/" target="_self">http://www.python.org/</a></div>For the ActiveState Python Interpreter see:<br><div class="indent"><a id="kb-link-2" href="http://www.activestate.com/products/activepython/" target="_self">http://www.activestate.com/Products/ActivePython/</a></div><br><span>The third-party products that are discussed in this article are manufactured by companies that are independent of Microsoft. Microsoft makes no warranty, implied or otherwise, regarding the performance or reliability of these products.<br></span><br><span>Microsoft provides third-party contact information to help you find technical support. This contact information may change without notice. Microsoft does not guarantee the accuracy of this third-party contact information.<br></span></div></div>
-            <!-- ngIf: contentSection.meta.type != 'single-column' && !$last -->
-        </div><!-- end ngRepeat: content in contentSection.content track by $index -->
-    </div><!-- end ngIf: contentSection.content && contentSection.content.length > 0 -->
-</section><!-- end ngIf: typeof(contentSection) !== 'string' --></div>
-</div><!-- end ngIf: !isString && hasContent() --><!-- end ngRepeat: section in contentSectionList track by $index -->
-<!-- ngIf: !isString --><div ng-if="!isString" class="ng-scope">
-    <div compile="contentSectionList" class="ng-isolate-scope"></div>
-</div><!-- end ngIf: !isString --></div>
-        </div>
+print '<p>' #this is a comment
+print 'See this is just like most other HTML'
+print '<br>'
+print '</BODY>'
 
-        <!-- ngIf: article.details.subType === 'error-status-code' -->
-    </div>
+Browse "Test.py" on the Web site: 
 
-    <div data-grid="container" class="main-content-container">
-        <!-- ngInclude: '/app/content/PartialViews/Content/ArticleFooter.html' --><div ng-include="'/app/content/PartialViews/Content/ArticleFooter.html'" class="ng-scope"><div class="ng-scope">
-   <hr class="c-divider f-pad-bottom-3x f-pad-top-3x">
-   <time class="c-label article-last-updated ng-binding" ng-attr-datetime="{{article.details.publishedOn || article.details.createdOn}}" ng-bind-html="(contentProperties.lastUpdatedFormat | compassFormat: {'lastModified': (article.details.publishedOn || article.details.createdOn | date : 'mediumDate')})" datetime="2018-04-17T07:47:09.1698123Z">Last Updated: Apr 17, 2018</time>
-</div>
-<related-articles article="article" class="ng-scope ng-isolate-scope"><!-- ngIf: ra.addRelatedArticles && ra.isExperimentArticle && ra.inSearchFlight --></related-articles>
+http://<computer_name>/scripts/test.py
+Alternatively, you can use the Python interpreter as your script interpreter in your ASP pages. After you have the Python scripting engine registered, create a file by using Notepad and include the following lines of code. Save the file in the scripts folder as Python.asp.
 
-<!-- ngIf: !article --></div>
-    </div>
+<%@LANGUAGE=Python%>
+<HTML>
+<head></head>
+<body>
+<h1>Python Test</h1>
 
-    <!-- ngIf: (article.details.subType === 'side-nav' || article.details.subType === 'error-status-code' || article.details.subType === 'release-notes') && article.sideNav -->
-</div></div>
+<%
+#do some python stuff here
+
+Response.Write('Python Test<br>')
+Response.write('<h3>Smaller heading</hr>')
+%>
+
+</body>
+</html>
+
+Browse "Python.asp" on the Web site:
+http://<computer_name>/scripts/python.asp
+References
+For more information on Python see:
+
+http://www.python.org/
+For the ActiveState Python Interpreter see:
+http://www.activestate.com/Products/ActivePython/
+
+The third-party products that are discussed in this article are manufactured by companies that are independent of Microsoft. Microsoft makes no warranty, implied or otherwise, regarding the performance or reliability of these products.
+
+Microsoft provides third-party contact information to help you find technical support. This contact information may change without notice. Microsoft does not guarantee the accuracy of this third-party contact information.
+Last Updated: Apr 17, 2018
