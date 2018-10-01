@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 print ("Status: 200 OK")
-print ("Content-Type: text/html;charset=gb2312")
-print ()
+print ("Content-Type: text/html;charset=gb2312")  # HTML is following
+print ()                                          # blank line, end of headers
 
 import urllib3
 import json
