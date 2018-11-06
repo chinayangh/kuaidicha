@@ -1,18 +1,27 @@
 <html>
 <body>
-<div align="right">Äú·ÃÎÊÒ³ÃæµÄÊ±¼äÊÇ<%=date()%>&nbsp<%=time()%></div>
+<div align="right">æ‚¨è®¿é—®é¡µé¢çš„æ—¶é—´æ˜¯<%=date()%>&nbsp<%=time()%></div>
 
-<font face="ËÎÌå,·ÂËÎÌå,Á¥Êé">ÏÔÊ¾×ÖÌåµÄºº×Ö</font><br>
+<font face="å®‹ä½“,ä»¿å®‹ä½“,éš¶ä¹¦">æ˜¾ç¤ºå­—ä½“çš„æ±‰å­—</font><br>
 <%
-rem ÕâÊÇÒ»Ìõ×¢ÊÍÓï¾ä
-'ÕâÊÇÁíÍâÒ»Ìõ×¢ÊÍÓï¾ä
+rem è¿™æ˜¯ä¸€æ¡æ³¨é‡Šè¯­å¥
+'è¿™æ˜¯å¦å¤–ä¸€æ¡æ³¨é‡Šè¯­å¥
 
 %>
 <% for i=1 to 12 %>
 
-<font size="<% =i %>">Ê¹ÓÃaspÓï¾ä¿ØÖÆ×ÖÌå´óÐ¡</font><br>
+<font size="<% =i %>">ä½¿ç”¨aspè¯­å¥æŽ§åˆ¶å­—ä½“å¤§å°</font><br>
 
 <%  next  %>
+  
+  
+<%
+	for each item In Request.Form
+		Response.Write Request.Form(item)
+
+	Next
+
+%>
 
 </body>
 </html>
